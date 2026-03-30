@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Builder
 public class Automovil {
     @Id
@@ -26,7 +27,7 @@ public class Automovil {
     private String color;
     @NotBlank
     @Length(min = 6, max = 7)
-    @Pattern(regexp = "^([a-zA-Z]{3}\\d{3}|[a-zA-Z]{2}\\d{3}[a-zA-Z]{2})$", message = "Por favor ingrese una patente válida")
+    @Pattern(regexp = "^([a-zA-Z]{3}\\d{3}|[a-zA-Z]{2}\\d{3}[a-zA-Z]{2})$", message = "Por favor ingrese una patente válida, por ej: xxx111 | xx111xx")
     @Column(unique = true)
     // Acepta el formato de patentes viejas como modernas
     private String patente;
