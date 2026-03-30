@@ -1,0 +1,13 @@
+package org.proyecto.consecionariaautomoviles;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ConsecionariaAutomovilesApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ConsecionariaAutomovilesApplication.class, args);
+    }
+
+}
