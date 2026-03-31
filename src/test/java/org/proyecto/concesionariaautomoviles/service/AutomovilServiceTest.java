@@ -13,6 +13,8 @@ import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
 import org.proyecto.concesionariaautomoviles.entity.Automovil;
 import org.proyecto.concesionariaautomoviles.repository.AutomovilRepository;
 
+import java.util.List;
+
 @ExtendWith(MockitoExtension.class)
 public class AutomovilServiceTest {
     @Mock
@@ -22,6 +24,7 @@ public class AutomovilServiceTest {
 
     private Automovil automovil;
     private AutomovilDTOReq automovilDTOReq;
+    private AutomovilDTORes automovilDTORes;
 
     @BeforeEach
     public void init(){
@@ -41,6 +44,15 @@ public class AutomovilServiceTest {
                 .color(automovilDTOReq.getColor())
                 .patente(automovilDTOReq.getPatente())
                 .build();
+
+        this.automovilDTORes = AutomovilDTORes.builder()
+                .id(automovil.getId())
+                .modelo(automovil.getModelo())
+                .marca(automovil.getMarca())
+                .motor(automovil.getMotor())
+                .color(automovil.getColor())
+                .patente(automovil.getPatente())
+                .build();
     }
 
     @Test
@@ -54,5 +66,32 @@ public class AutomovilServiceTest {
         Assertions.assertThat(savedAutomovil.getId()).isEqualTo(automovil.getId());
 
         Mockito.verify(automovilRepository, Mockito.times(1)).save(Mockito.any(Automovil.class));
+    }
+
+    @Test
+    public void automovilService_traerTodos_returnsAllAutomoviles(){
+        Mockito.when(automovilRepository.findAll())
+                .thenReturn(List.of(automovil));
+
+        List<AutomovilDTORes> automoviles = automovilService.traerTodos();
+
+        Assertions.assertThat(automoviles).isNotNull();
+        Assertions.assertThat(automoviles).isNotEmpty();
+        Assertions.assertThat(automoviles).hasSize(1);
+
+        Mockito.verify(automovilRepository, Mockito.times(1)).findAll();
+    }
+
+    @Test
+    public void automovilService_traerTodos_returnsEmptyList(){
+        Mockito.when(automovilRepository.findAll())
+                .thenReturn(List.of());
+
+        List<AutomovilDTORes> automoviles = automovilService.traerTodos();
+
+        Assertions.assertThat(automoviles).isNotNull();
+        Assertions.assertThat(automoviles).isEmpty();
+
+        Mockito.verify(automovilRepository, Mockito.times(1)).findAll();
     }
 }

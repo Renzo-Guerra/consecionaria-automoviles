@@ -9,6 +9,10 @@ import org.proyecto.concesionariaautomoviles.repository.AutomovilRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class AutomovilService {
@@ -21,5 +25,13 @@ public class AutomovilService {
         Automovil savedAutomovil = automovilRepository.save(newAutomovil);
 
         return AutomovilMapper.AutomovilToAutomovilDTORes(savedAutomovil);
+    }
+
+    public List<AutomovilDTORes> traerTodos() {
+        List<Automovil> automoviles = this.automovilRepository.findAll();
+
+        return automoviles.stream()
+                .map(AutomovilMapper::AutomovilToAutomovilDTORes)
+                .toList();
     }
 }

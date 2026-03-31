@@ -8,6 +8,8 @@ import org.proyecto.concesionariaautomoviles.entity.Automovil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
+import java.util.List;
+
 @DataJpaTest
 public class AutomovilRepositoryTest {
     @Autowired
@@ -40,6 +42,17 @@ public class AutomovilRepositoryTest {
 
         Assertions.assertThatThrownBy(() -> this.automovilRepository.save(this.automovil))
                 .isInstanceOf(ConstraintViolationException.class);
+    }
+
+    @Test
+    public void automovilRepository_findAll_returnsAllAutomoviles(){
+        this.automovilRepository.save(automovil);
+
+        List<Automovil> automoviles = this.automovilRepository.findAll();
+
+        Assertions.assertThat(automoviles).isNotNull();
+        Assertions.assertThat(automoviles).isNotEmpty();
+        Assertions.assertThat(automoviles).hasSize(1);
     }
 
 }

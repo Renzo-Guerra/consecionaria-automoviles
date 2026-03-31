@@ -15,7 +15,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.List;
+
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WebMvcTest(controllers = AutomovilController.class)
@@ -76,5 +79,31 @@ public class AutomovilControllerTest {
 
         response.andExpect(MockMvcResultMatchers.status().is(400))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.patente").value("Por favor ingrese una patente válida, por ej: xxx111 | xx111xx"));
+    }
+
+    @Test
+    public void automovilController_traerTodos_returnsAllAutomoviles() throws Exception {
+        given(automovilService.traerTodos())
+                .willReturn(List.of(automovilDTORes));
+
+        ResultActions response = mockMvc.perform(get("/api/automoviles")
+                .accept(MediaType.APPLICATION_JSON));
+
+        response.andExpect(MockMvcResultMatchers.status().is(200))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(1));
+    }
+
+    @Test
+    public void automovilController_traerTodos_returnsEmptyList() throws Exception {
+        given(automovilService.traerTodos())
+                .willReturn(List.of());
+
+        ResultActions response = mockMvc.perform(get("/api/automoviles")
+                .accept(MediaType.APPLICATION_JSON));
+
+        response.andExpect(MockMvcResultMatchers.status().is(200))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(0));
     }
 }
