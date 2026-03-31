@@ -1,4 +1,4 @@
-# Consecionaria de automoviles
+# Concesionaria de automoviles
 
 ## Problematica
 Una tienda venta de automóviles necesita de un sistema que le permita

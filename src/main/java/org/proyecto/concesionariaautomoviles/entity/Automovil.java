@@ -1,4 +1,4 @@
-package org.proyecto.consecionariaautomoviles.entity;
+package org.proyecto.concesionariaautomoviles.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

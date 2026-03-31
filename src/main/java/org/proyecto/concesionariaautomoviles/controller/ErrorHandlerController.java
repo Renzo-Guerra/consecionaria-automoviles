@@ -1,9 +1,5 @@
-package org.proyecto.consecionariaautomoviles.controller;
+package org.proyecto.concesionariaautomoviles.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;

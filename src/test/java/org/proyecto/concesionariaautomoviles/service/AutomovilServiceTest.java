@@ -1,4 +1,4 @@
-package org.proyecto.consecionariaautomoviles.service;
+package org.proyecto.concesionariaautomoviles.service;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,10 +8,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.proyecto.consecionariaautomoviles.dto.AutomovilDTOReq;
-import org.proyecto.consecionariaautomoviles.dto.AutomovilDTORes;
-import org.proyecto.consecionariaautomoviles.entity.Automovil;
-import org.proyecto.consecionariaautomoviles.repository.AutomovilRepository;
+import org.proyecto.concesionariaautomoviles.dto.AutomovilDTOReq;
+import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
+import org.proyecto.concesionariaautomoviles.entity.Automovil;
+import org.proyecto.concesionariaautomoviles.repository.AutomovilRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class AutomovilServiceTest {

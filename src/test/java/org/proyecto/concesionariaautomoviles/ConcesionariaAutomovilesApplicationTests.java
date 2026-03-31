@@ -1,10 +1,10 @@
-package org.proyecto.consecionariaautomoviles;
+package org.proyecto.concesionariaautomoviles;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ConsecionariaAutomovilesApplicationTests {
+class ConcesionariaAutomovilesApplicationTests {
 
     @Test
     void contextLoads() {

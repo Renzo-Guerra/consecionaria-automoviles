@@ -1,10 +1,10 @@
-package org.proyecto.consecionariaautomoviles.controller;
+package org.proyecto.concesionariaautomoviles.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.proyecto.consecionariaautomoviles.dto.AutomovilDTOReq;
-import org.proyecto.consecionariaautomoviles.dto.AutomovilDTORes;
-import org.proyecto.consecionariaautomoviles.service.AutomovilService;
+import org.proyecto.concesionariaautomoviles.dto.AutomovilDTOReq;
+import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
+import org.proyecto.concesionariaautomoviles.service.AutomovilService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

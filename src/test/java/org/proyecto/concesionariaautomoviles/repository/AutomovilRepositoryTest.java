@@ -1,10 +1,10 @@
-package org.proyecto.consecionariaautomoviles.repository;
+package org.proyecto.concesionariaautomoviles.repository;
 
 import jakarta.validation.ConstraintViolationException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.proyecto.consecionariaautomoviles.entity.Automovil;
+import org.proyecto.concesionariaautomoviles.entity.Automovil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 

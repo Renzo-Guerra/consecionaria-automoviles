@@ -1,11 +1,11 @@
-package org.proyecto.consecionariaautomoviles.controller;
+package org.proyecto.concesionariaautomoviles.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
-import org.proyecto.consecionariaautomoviles.dto.AutomovilDTOReq;
-import org.proyecto.consecionariaautomoviles.dto.AutomovilDTORes;
-import org.proyecto.consecionariaautomoviles.service.AutomovilService;
+import org.proyecto.concesionariaautomoviles.dto.AutomovilDTOReq;
+import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
+import org.proyecto.concesionariaautomoviles.service.AutomovilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;

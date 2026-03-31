@@ -1,4 +1,4 @@
-package org.proyecto.consecionariaautomoviles.dto;
+package org.proyecto.concesionariaautomoviles.dto;
 
 import lombok.*;
 

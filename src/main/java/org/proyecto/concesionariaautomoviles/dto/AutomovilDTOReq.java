@@ -1,4 +1,4 @@
-package org.proyecto.consecionariaautomoviles.dto;
+package org.proyecto.concesionariaautomoviles.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

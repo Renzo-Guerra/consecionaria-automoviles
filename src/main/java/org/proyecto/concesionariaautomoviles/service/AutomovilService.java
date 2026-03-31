@@ -1,11 +1,11 @@
-package org.proyecto.consecionariaautomoviles.service;
+package org.proyecto.concesionariaautomoviles.service;
 
 import lombok.RequiredArgsConstructor;
-import org.proyecto.consecionariaautomoviles.dto.AutomovilDTOReq;
-import org.proyecto.consecionariaautomoviles.dto.AutomovilDTORes;
-import org.proyecto.consecionariaautomoviles.entity.Automovil;
-import org.proyecto.consecionariaautomoviles.mapper.AutomovilMapper;
-import org.proyecto.consecionariaautomoviles.repository.AutomovilRepository;
+import org.proyecto.concesionariaautomoviles.dto.AutomovilDTOReq;
+import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
+import org.proyecto.concesionariaautomoviles.entity.Automovil;
+import org.proyecto.concesionariaautomoviles.mapper.AutomovilMapper;
+import org.proyecto.concesionariaautomoviles.repository.AutomovilRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,8 +1,8 @@
-package org.proyecto.consecionariaautomoviles.mapper;
+package org.proyecto.concesionariaautomoviles.mapper;
 
-import org.proyecto.consecionariaautomoviles.dto.AutomovilDTOReq;
-import org.proyecto.consecionariaautomoviles.dto.AutomovilDTORes;
-import org.proyecto.consecionariaautomoviles.entity.Automovil;
+import org.proyecto.concesionariaautomoviles.dto.AutomovilDTOReq;
+import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
+import org.proyecto.concesionariaautomoviles.entity.Automovil;
 
 public class AutomovilMapper {
     public static Automovil AutomovilDTOReqToAutomovil(AutomovilDTOReq dto){
