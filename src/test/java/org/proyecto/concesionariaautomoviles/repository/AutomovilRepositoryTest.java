@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 public class AutomovilRepositoryTest {
@@ -53,6 +54,24 @@ public class AutomovilRepositoryTest {
         Assertions.assertThat(automoviles).isNotNull();
         Assertions.assertThat(automoviles).isNotEmpty();
         Assertions.assertThat(automoviles).hasSize(1);
+    }
+
+    @Test
+    public void automovilRepository_findById_returnsRequestedAutomovil(){
+        Automovil savedAutomovil = automovilRepository.save(automovil);
+        Optional<Automovil> posibleAutomovil = automovilRepository.findById(savedAutomovil.getId());
+
+        Assertions.assertThat(posibleAutomovil).isNotNull();
+        Assertions.assertThat(posibleAutomovil).isNotEmpty();
+        Assertions.assertThat(posibleAutomovil.get()).isEqualTo(savedAutomovil);
+    }
+
+    @Test
+    public void automovilRepository_findById_returnsEmptyOptional(){
+        Optional<Automovil> posibleAutomovil = automovilRepository.findById(1L);
+
+        Assertions.assertThat(posibleAutomovil).isNotNull();
+        Assertions.assertThat(posibleAutomovil).isEmpty();
     }
 
 }

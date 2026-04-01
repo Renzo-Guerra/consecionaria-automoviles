@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTOReq;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
+import org.proyecto.concesionariaautomoviles.exception.CustomNotFoundException;
 import org.proyecto.concesionariaautomoviles.service.AutomovilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -105,5 +106,30 @@ public class AutomovilControllerTest {
         response.andExpect(MockMvcResultMatchers.status().is(200))
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(0));
+    }
+
+    @Test
+    public void automovilController_traerPorId_returnsRequestedAutomovil() throws Exception{
+        given(automovilService.traerPorId(automovilDTORes.getId()))
+                .willReturn(automovilDTORes);
+
+        ResultActions response = mockMvc.perform(get("/api/automoviles/" + automovilDTORes.getId())
+                .accept(MediaType.APPLICATION_JSON));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(automovilDTORes.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.patente").value(automovilDTORes.getPatente()));
+    }
+
+    @Test
+    public void automovilController_traerPorId_returnsNotFoundException() throws Exception {
+        given(automovilService.traerPorId(automovilDTORes.getId()))
+                .willThrow(new CustomNotFoundException("No se encontró ningun automovil con el id " + automovilDTORes.getId() + "!"));
+
+        ResultActions response = mockMvc.perform(get("/api/automoviles/" + automovilDTORes.getId())
+                .accept(MediaType.APPLICATION_JSON));
+
+        response.andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }

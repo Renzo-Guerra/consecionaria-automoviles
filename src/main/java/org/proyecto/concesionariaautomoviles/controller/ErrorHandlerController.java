@@ -1,5 +1,6 @@
 package org.proyecto.concesionariaautomoviles.controller;
 
+import org.proyecto.concesionariaautomoviles.exception.CustomNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,5 +25,10 @@ public class ErrorHandlerController {
                 });
 
         return ResponseEntity.status(400).body(errors);
+    }
+
+    @ExceptionHandler(CustomNotFoundException.class)
+    public ResponseEntity<String> handlerCustomNotFoundException(CustomNotFoundException exception){
+        return ResponseEntity.status(404).body(exception.getMessage());
     }
 }

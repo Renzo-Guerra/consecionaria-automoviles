@@ -27,4 +27,9 @@ public class AutomovilController {
     public ResponseEntity<List<AutomovilDTORes>> traerTodos(){
         return ResponseEntity.ok(this.automovilService.traerTodos());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AutomovilDTORes> traerPorId(@PathVariable("id") Long id){
+        return ResponseEntity.ok(this.automovilService.traerPorId(id));
+    }
 }

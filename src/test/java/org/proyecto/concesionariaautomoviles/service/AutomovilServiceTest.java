@@ -11,9 +11,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTOReq;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
 import org.proyecto.concesionariaautomoviles.entity.Automovil;
+import org.proyecto.concesionariaautomoviles.exception.CustomNotFoundException;
 import org.proyecto.concesionariaautomoviles.repository.AutomovilRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class AutomovilServiceTest {
@@ -93,5 +95,37 @@ public class AutomovilServiceTest {
         Assertions.assertThat(automoviles).isEmpty();
 
         Mockito.verify(automovilRepository, Mockito.times(1)).findAll();
+    }
+
+    @Test
+    public void automovilService_traerPorId_returnsRequestedAutomovil(){
+        Mockito.when(automovilRepository.findById(automovil.getId()))
+                .thenReturn(Optional.of(automovil));
+
+        AutomovilDTORes returnedAutomovil = automovilService.traerPorId(automovil.getId());
+
+        Assertions.assertThat(returnedAutomovil).isNotNull();
+        Assertions.assertThat(returnedAutomovil.getId()).isEqualTo(automovil.getId());
+    }
+
+    @Test
+    public void automovilService_traerPorId_throwsIllegalArgumentException(){
+        Assertions.assertThatThrownBy(() -> automovilService.traerPorId(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("El id proporcionado no puede ser nulo!");
+
+        Mockito.verify(automovilRepository, Mockito.never()).findById(Mockito.any(Long.class));
+    }
+
+    @Test
+    public void automovilService_traerPorId_throwsCustomNotFoundException(){
+        Mockito.when(automovilRepository.findById(automovil.getId()))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThatThrownBy(() -> automovilService.traerPorId(automovil.getId()))
+                .isInstanceOf(CustomNotFoundException.class)
+                .hasMessageContaining("No se encontró ningun automovil con el id " + automovil.getId() + "!");
+
+        Mockito.verify(automovilRepository, Mockito.times(1)).findById(automovil.getId());
     }
 }
