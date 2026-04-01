@@ -132,7 +132,8 @@ public class AutomovilControllerTest {
         ResultActions response = mockMvc.perform(get("/api/automoviles/" + automovilDTORes.getId())
                 .accept(MediaType.APPLICATION_JSON));
 
-        response.andExpect(MockMvcResultMatchers.status().isNotFound());
+        response.andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("No se encontró ningun automovil con el id " + automovilDTORes.getId() + "!"));
     }
 
     @Test
@@ -159,7 +160,8 @@ public class AutomovilControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(automovilDTOReq)));
 
-        response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+        response.andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Ya existe un automovil con la patente " + automovilDTOReq.getPatente()));
     }
 
     @Test
@@ -186,6 +188,6 @@ public class AutomovilControllerTest {
                 .contentType(MediaType.APPLICATION_JSON));
 
         result.andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.jsonPath("$").value("No se encontró ningun automovil con el id " + customId + "!"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("No se encontró ningun automovil con el id " + customId + "!"));
     }
 }

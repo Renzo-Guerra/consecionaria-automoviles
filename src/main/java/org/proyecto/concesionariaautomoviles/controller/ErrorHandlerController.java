@@ -29,12 +29,20 @@ public class ErrorHandlerController {
     }
 
     @ExceptionHandler(CustomNotFoundException.class)
-    public ResponseEntity<String> handlerCustomNotFoundException(CustomNotFoundException exception){
-        return ResponseEntity.status(404).body(exception.getMessage());
+    public ResponseEntity<HashMap<String, String>> handlerCustomNotFoundException(CustomNotFoundException exception){
+        HashMap<String, String> error = new HashMap<>();
+
+        error.put("message", exception.getMessage());
+
+        return ResponseEntity.status(404).body(error);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<String> handlerDataIntegrityViolationException(DataIntegrityViolationException exception){
-        return ResponseEntity.status(400).body(exception.getMessage());
+    public ResponseEntity<HashMap<String, String>> handlerDataIntegrityViolationException(DataIntegrityViolationException exception){
+        HashMap<String, String> error = new HashMap<>();
+
+        error.put("message", exception.getMessage());
+
+        return ResponseEntity.status(400).body(error);
     }
 }
