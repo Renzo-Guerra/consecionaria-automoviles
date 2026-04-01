@@ -12,6 +12,7 @@ public class AutomovilMapper {
                 .motor(dto.getMotor())
                 .color(dto.getColor())
                 .patente(dto.getPatente())
+                .cantPuertas(dto.getCantPuertas())
                 .build();
     }
 
@@ -23,6 +24,7 @@ public class AutomovilMapper {
                 .motor(automovil.getMotor())
                 .color(automovil.getColor())
                 .patente(automovil.getPatente())
+                .cantPuertas(automovil.getCantPuertas())
                 .build();
     }
 }

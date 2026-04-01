@@ -53,6 +53,7 @@ public class AutomovilService {
         automovil.setMotor(dto.getMotor());
         automovil.setColor(dto.getColor());
         automovil.setPatente(dto.getPatente());
+        automovil.setCantPuertas(dto.getCantPuertas());
 
         Automovil editedAutomovil = this.guardar(automovil);
 

@@ -14,4 +14,5 @@ public class AutomovilDTORes {
     private String motor;
     private String color;
     private String patente;
+    private int cantPuertas;
 }

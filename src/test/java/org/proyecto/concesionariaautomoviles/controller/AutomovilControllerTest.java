@@ -44,6 +44,7 @@ public class AutomovilControllerTest {
                 .motor("1.6L Sigma Ti-VCT")
                 .color("negro")
                 .patente("afr233")
+                .cantPuertas(4)
                 .build();
         this.automovilDTORes = AutomovilDTORes.builder()
                 .id(1L)
@@ -52,6 +53,7 @@ public class AutomovilControllerTest {
                 .motor(automovilDTOReq.getMotor())
                 .color(automovilDTOReq.getColor())
                 .patente(automovilDTOReq.getPatente())
+                .cantPuertas(automovilDTOReq.getCantPuertas())
                 .build();
     }
 

@@ -26,6 +26,7 @@ public class AutomovilRepositoryTest {
                 .motor("1.6L Sigma Ti-VCT")
                 .color("negro")
                 .patente("afr233")
+                .cantPuertas(4)
                 .build();
     }
 
@@ -83,6 +84,7 @@ public class AutomovilRepositoryTest {
         savedAutomovil.setMotor("1.6L 4 cilindros DOHC");
         savedAutomovil.setColor("Blanco Perla");
         savedAutomovil.setPatente("ABC123");
+        savedAutomovil.setCantPuertas(4);
 
         Automovil editedAutomovil = automovilRepository.save(savedAutomovil);
 
@@ -92,6 +94,8 @@ public class AutomovilRepositoryTest {
         Assertions.assertThat(editedAutomovil.getMotor()).isEqualTo(savedAutomovil.getMotor());
         Assertions.assertThat(editedAutomovil.getColor()).isEqualTo(savedAutomovil.getColor());
         Assertions.assertThat(editedAutomovil.getPatente()).isEqualTo(savedAutomovil.getPatente());
+        Assertions.assertThat(editedAutomovil.getCantPuertas()).isEqualTo(savedAutomovil.getCantPuertas());
+
     }
 
     @Test

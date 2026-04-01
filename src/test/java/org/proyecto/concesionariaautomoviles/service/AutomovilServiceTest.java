@@ -35,6 +35,7 @@ public class AutomovilServiceTest {
                 .motor("1.6L Sigma Ti-VCT")
                 .color("negro")
                 .patente("afr233")
+                .cantPuertas(4)
                 .build();
 
         this.automovil = Automovil.builder()
@@ -44,6 +45,7 @@ public class AutomovilServiceTest {
                 .motor(automovilDTOReq.getMotor())
                 .color(automovilDTOReq.getColor())
                 .patente(automovilDTOReq.getPatente())
+                .cantPuertas(automovilDTOReq.getCantPuertas())
                 .build();
     }
 
@@ -127,6 +129,7 @@ public class AutomovilServiceTest {
                 .motor("1.6L 4 cilindros DOHC")
                 .color("Blanco Perla")
                 .patente("ABC123")
+                .cantPuertas(4)
                 .build();
 
         Automovil editedAutomovil = Automovil.builder()
@@ -136,6 +139,7 @@ public class AutomovilServiceTest {
                 .motor(dtoReq.getMotor())
                 .color(dtoReq.getColor())
                 .patente(dtoReq.getPatente())
+                .cantPuertas(dtoReq.getCantPuertas())
                 .build();
 
         Mockito.when(automovilRepository.findById(automovil.getId()))
@@ -151,6 +155,7 @@ public class AutomovilServiceTest {
         Assertions.assertThat(response.getMotor()).isEqualTo(dtoReq.getMotor());
         Assertions.assertThat(response.getColor()).isEqualTo(dtoReq.getColor());
         Assertions.assertThat(response.getPatente()).isEqualTo(dtoReq.getPatente());
+        Assertions.assertThat(response.getCantPuertas()).isEqualTo(dtoReq.getCantPuertas());
 
         Mockito.verify(automovilRepository, Mockito.times(1)).findById(automovil.getId());
         Mockito.verify(automovilRepository, Mockito.times(1)).save(Mockito.any(Automovil.class));

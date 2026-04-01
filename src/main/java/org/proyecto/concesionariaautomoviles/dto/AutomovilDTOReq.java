@@ -2,6 +2,7 @@ package org.proyecto.concesionariaautomoviles.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -24,4 +25,6 @@ public class AutomovilDTOReq {
     @Pattern(regexp = "^([a-zA-Z]{3}\\d{3}|[a-zA-Z]{2}\\d{3}[a-zA-Z]{2})$", message = "Por favor ingrese una patente válida, por ej: xxx111 | xx111xx")
     // Acepta el formato de patentes viejas como modernas
     private String patente;
+    @Positive
+    private int cantPuertas;
 }

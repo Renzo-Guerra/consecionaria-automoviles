@@ -2,7 +2,9 @@ package org.proyecto.concesionariaautomoviles.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -31,5 +33,6 @@ public class Automovil {
     @Column(unique = true)
     // Acepta el formato de patentes viejas como modernas
     private String patente;
-
+    @Positive
+    private int cantPuertas;
 }
