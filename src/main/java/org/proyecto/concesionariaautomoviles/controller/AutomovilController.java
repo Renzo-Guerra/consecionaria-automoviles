@@ -37,4 +37,11 @@ public class AutomovilController {
     public ResponseEntity<AutomovilDTORes> editar(@PathVariable("id") Long id, @Valid @RequestBody AutomovilDTOReq dto){
         return ResponseEntity.ok(this.automovilService.editar(id, dto));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable("id") Long id){
+        this.automovilService.eliminar(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }

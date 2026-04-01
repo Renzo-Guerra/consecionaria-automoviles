@@ -26,7 +26,6 @@ public class AutomovilServiceTest {
 
     private Automovil automovil;
     private AutomovilDTOReq automovilDTOReq;
-    private AutomovilDTORes automovilDTORes;
 
     @BeforeEach
     public void init(){
@@ -45,15 +44,6 @@ public class AutomovilServiceTest {
                 .motor(automovilDTOReq.getMotor())
                 .color(automovilDTOReq.getColor())
                 .patente(automovilDTOReq.getPatente())
-                .build();
-
-        this.automovilDTORes = AutomovilDTORes.builder()
-                .id(automovil.getId())
-                .modelo(automovil.getModelo())
-                .marca(automovil.getMarca())
-                .motor(automovil.getMotor())
-                .color(automovil.getColor())
-                .patente(automovil.getPatente())
                 .build();
     }
 
@@ -164,6 +154,32 @@ public class AutomovilServiceTest {
 
         Mockito.verify(automovilRepository, Mockito.times(1)).findById(automovil.getId());
         Mockito.verify(automovilRepository, Mockito.times(1)).save(Mockito.any(Automovil.class));
+    }
+
+    @Test
+    public void automovilService_eliminar_deletesAutomovil(){
+        Mockito.when(automovilRepository.findById(automovil.getId()))
+                .thenReturn(Optional.of(automovil));
+
+        automovilService.eliminar(automovil.getId());
+
+        Mockito.verify(automovilRepository, Mockito.times(1)).findById(automovil.getId());
+        Mockito.verify(automovilRepository, Mockito.times(1)).delete(automovil);
+    }
+
+    @Test
+    public void automovilService_eliminar_throwsCustomNotFoundExceptionz(){
+        Long customId = 2L;
+
+        Mockito.when(automovilRepository.findById(customId))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThatThrownBy(() -> automovilService.eliminar(customId))
+                .isInstanceOf(CustomNotFoundException.class)
+                .hasMessageContaining("No se encontró ningun automovil con el id " + customId + "!");
+
+        Mockito.verify(automovilRepository, Mockito.times(1)).findById(customId);
+        Mockito.verify(automovilRepository, Mockito.never()).delete(Mockito.any(Automovil.class));
     }
 
 }

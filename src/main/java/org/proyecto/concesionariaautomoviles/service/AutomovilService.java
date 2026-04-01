@@ -87,4 +87,10 @@ public class AutomovilService {
         }
     }
 
+    @Transactional
+    public void eliminar(Long id) {
+        Automovil automovil = this.traerEntidadPorId(id);
+
+        automovilRepository.delete(automovil);
+    }
 }

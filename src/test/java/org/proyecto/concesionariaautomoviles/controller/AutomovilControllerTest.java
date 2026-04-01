@@ -3,6 +3,7 @@ package org.proyecto.concesionariaautomoviles.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTOReq;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
 import org.proyecto.concesionariaautomoviles.exception.CustomNotFoundException;
@@ -20,6 +21,7 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest(controllers = AutomovilController.class)
@@ -158,5 +160,32 @@ public class AutomovilControllerTest {
                 .content(objectMapper.writeValueAsString(automovilDTOReq)));
 
         response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void automovilController_eliminar_deletesAutomovil() throws Exception {
+        Long customId = 1L;
+
+        doNothing().when(automovilService).eliminar(customId);
+
+        ResultActions result = mockMvc.perform(delete("/api/automoviles/" + customId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    public void automovilController_eliminar_throwsCustomNotFoundException() throws Exception {
+        Long customId = 1L;
+
+        Mockito.doThrow(new CustomNotFoundException("No se encontró ningun automovil con el id " + customId + "!"))
+                .when(automovilService).eliminar(customId);
+
+
+        ResultActions result = mockMvc.perform(delete("/api/automoviles/" + customId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        result.andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").value("No se encontró ningun automovil con el id " + customId + "!"));
     }
 }

@@ -94,4 +94,16 @@ public class AutomovilRepositoryTest {
         Assertions.assertThat(editedAutomovil.getPatente()).isEqualTo(savedAutomovil.getPatente());
     }
 
+    @Test
+    public void automovilRepository_delete_deletesAutomovil(){
+        Automovil savedAutomovil = automovilRepository.save(automovil);
+
+        automovilRepository.delete(savedAutomovil);
+
+        Optional<Automovil> posibleAutomovil = automovilRepository.findById(savedAutomovil.getId());
+
+        Assertions.assertThat(posibleAutomovil).isNotNull();
+        Assertions.assertThat(posibleAutomovil).isEmpty();
+    }
+
 }
