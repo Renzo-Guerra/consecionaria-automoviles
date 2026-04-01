@@ -5,8 +5,10 @@ import org.proyecto.concesionariaautomoviles.dto.AutomovilDTOReq;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
 import org.proyecto.concesionariaautomoviles.entity.Automovil;
 import org.proyecto.concesionariaautomoviles.exception.CustomNotFoundException;
+import org.proyecto.concesionariaautomoviles.exception.DuplicateValueException;
 import org.proyecto.concesionariaautomoviles.mapper.AutomovilMapper;
 import org.proyecto.concesionariaautomoviles.repository.AutomovilRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +23,30 @@ public class AutomovilService {
     public AutomovilDTORes crear(AutomovilDTOReq requestDto){
         Automovil newAutomovil = AutomovilMapper.AutomovilDTOReqToAutomovil(requestDto);
 
-        Automovil savedAutomovil = automovilRepository.save(newAutomovil);
+        Automovil savedAutomovil = this.guardar(newAutomovil);
 
         return AutomovilMapper.AutomovilToAutomovilDTORes(savedAutomovil);
+    }
+
+    private Automovil formatValues(Automovil automovil){
+        // Generalizamos/estandarizamos los valores
+        automovil.setModelo(automovil.getModelo().trim().toLowerCase());
+        automovil.setMarca(automovil.getMarca().trim().toLowerCase());
+        automovil.setMotor(automovil.getMotor().trim().toLowerCase());
+        automovil.setColor(automovil.getColor().trim().toLowerCase());
+        automovil.setPatente(automovil.getPatente().trim().toUpperCase());
+
+        return automovil;
+    }
+
+    private Automovil guardar(Automovil automovil){
+        Automovil formatedAutomovil = this.formatValues(automovil);
+
+        try{
+            return this.automovilRepository.save(formatedAutomovil);
+        }catch (DataIntegrityViolationException exception){
+            throw new DuplicateValueException("Ya existe un automovil con la patente " + automovil.getPatente());
+        }
     }
 
     @Transactional(readOnly = true)
@@ -59,7 +82,7 @@ public class AutomovilService {
         automovil.setColor(dto.getColor());
         automovil.setPatente(dto.getPatente());
 
-        Automovil editedAutomovil = this.automovilRepository.save(automovil);
+        Automovil editedAutomovil = this.guardar(automovil);
 
         return AutomovilMapper.AutomovilToAutomovilDTORes(editedAutomovil);
     }
