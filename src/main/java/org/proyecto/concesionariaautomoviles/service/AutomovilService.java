@@ -1,6 +1,5 @@
 package org.proyecto.concesionariaautomoviles.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTOReq;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
@@ -27,6 +26,7 @@ public class AutomovilService {
         return AutomovilMapper.AutomovilToAutomovilDTORes(savedAutomovil);
     }
 
+    @Transactional(readOnly = true)
     public List<AutomovilDTORes> traerTodos() {
         List<Automovil> automoviles = this.automovilRepository.findAll();
 
@@ -42,6 +42,7 @@ public class AutomovilService {
                     .orElseThrow(() -> new CustomNotFoundException("No se encontró ningun automovil con el id " + id + "!"));
     }
 
+    @Transactional
     public AutomovilDTORes traerPorId(Long id) {
         Automovil automovil = this.traerEntidadPorId(id);
 
