@@ -28,27 +28,6 @@ public class AutomovilService {
         return AutomovilMapper.AutomovilToAutomovilDTORes(savedAutomovil);
     }
 
-    private Automovil formatValues(Automovil automovil){
-        // Generalizamos/estandarizamos los valores
-        automovil.setModelo(automovil.getModelo().trim().toLowerCase());
-        automovil.setMarca(automovil.getMarca().trim().toLowerCase());
-        automovil.setMotor(automovil.getMotor().trim().toLowerCase());
-        automovil.setColor(automovil.getColor().trim().toLowerCase());
-        automovil.setPatente(automovil.getPatente().trim().toUpperCase());
-
-        return automovil;
-    }
-
-    private Automovil guardar(Automovil automovil){
-        Automovil formatedAutomovil = this.formatValues(automovil);
-
-        try{
-            return this.automovilRepository.save(formatedAutomovil);
-        }catch (DataIntegrityViolationException exception){
-            throw new DuplicateValueException("Ya existe un automovil con la patente " + automovil.getPatente());
-        }
-    }
-
     @Transactional(readOnly = true)
     public List<AutomovilDTORes> traerTodos() {
         List<Automovil> automoviles = this.automovilRepository.findAll();
@@ -56,13 +35,6 @@ public class AutomovilService {
         return automoviles.stream()
                 .map(AutomovilMapper::AutomovilToAutomovilDTORes)
                 .toList();
-    }
-
-    private Automovil traerEntidadPorId(Long id){
-        if(id == null) throw new IllegalArgumentException("El id proporcionado no puede ser nulo!");
-
-        return this.automovilRepository.findById(id)
-                    .orElseThrow(() -> new CustomNotFoundException("No se encontró ningun automovil con el id " + id + "!"));
     }
 
     @Transactional
@@ -86,4 +58,33 @@ public class AutomovilService {
 
         return AutomovilMapper.AutomovilToAutomovilDTORes(editedAutomovil);
     }
+
+    private Automovil traerEntidadPorId(Long id){
+        if(id == null) throw new IllegalArgumentException("El id proporcionado no puede ser nulo!");
+
+        return this.automovilRepository.findById(id)
+                .orElseThrow(() -> new CustomNotFoundException("No se encontró ningun automovil con el id " + id + "!"));
+    }
+
+    private Automovil formatValues(Automovil automovil){
+        // Generalizamos/estandarizamos los valores
+        automovil.setModelo(automovil.getModelo().trim().toLowerCase());
+        automovil.setMarca(automovil.getMarca().trim().toLowerCase());
+        automovil.setMotor(automovil.getMotor().trim().toLowerCase());
+        automovil.setColor(automovil.getColor().trim().toLowerCase());
+        automovil.setPatente(automovil.getPatente().trim().toUpperCase());
+
+        return automovil;
+    }
+
+    private Automovil guardar(Automovil automovil){
+        Automovil formatedAutomovil = this.formatValues(automovil);
+
+        try{
+            return this.automovilRepository.save(formatedAutomovil);
+        }catch (DataIntegrityViolationException exception){
+            throw new DuplicateValueException("Ya existe un automovil con la patente " + automovil.getPatente());
+        }
+    }
+
 }
