@@ -187,4 +187,32 @@ public class AutomovilServiceTest {
         Mockito.verify(automovilRepository, Mockito.never()).delete(Mockito.any(Automovil.class));
     }
 
+    @Test
+    public void automovilService_traerPorCantPuertas_returnsAutomovilesWithRequestedPuertas(){
+        Mockito.when(automovilRepository.findAllByCantPuertas(automovil.getCantPuertas()))
+                .thenReturn(List.of(automovil));
+
+        List<AutomovilDTORes> filteredAutomoviles = automovilService.traerPorCantPuertas(automovil.getCantPuertas());
+
+        Assertions.assertThat(filteredAutomoviles).isNotNull();
+        Assertions.assertThat(filteredAutomoviles).isNotEmpty();
+        Assertions.assertThat(filteredAutomoviles).hasSize(1);
+        Assertions.assertThat(filteredAutomoviles.getFirst().getId()).isEqualTo(automovil.getId());
+
+        Mockito.verify(automovilRepository, Mockito.times(1)).findAllByCantPuertas(automovil.getCantPuertas());
+    }
+
+    @Test
+    public void automovilService_traerPorCantPuertas_returnsEmptyList(){
+        Mockito.when(automovilRepository.findAllByCantPuertas(automovil.getCantPuertas()))
+                .thenReturn(List.of());
+
+        List<AutomovilDTORes> filteredAutomoviles = automovilService.traerPorCantPuertas(automovil.getCantPuertas());
+
+        Assertions.assertThat(filteredAutomoviles).isNotNull();
+        Assertions.assertThat(filteredAutomoviles).isEmpty();
+
+        Mockito.verify(automovilRepository, Mockito.times(1)).findAllByCantPuertas(automovil.getCantPuertas());
+    }
+
 }

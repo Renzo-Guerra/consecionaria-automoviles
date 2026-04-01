@@ -110,4 +110,26 @@ public class AutomovilRepositoryTest {
         Assertions.assertThat(posibleAutomovil).isEmpty();
     }
 
+    @Test
+    public void automovilRepository_findAllByCantPuertas_returnsAutomovilesWithRequestedPuertas(){
+        Automovil savedAutomovil = automovilRepository.save(automovil);
+
+        List<Automovil> filteredAutomoviles = automovilRepository.findAllByCantPuertas(automovil.getCantPuertas());
+
+        Assertions.assertThat(filteredAutomoviles).isNotNull();
+        Assertions.assertThat(filteredAutomoviles).isNotEmpty();
+        Assertions.assertThat(filteredAutomoviles).hasSize(1);
+        Assertions.assertThat(filteredAutomoviles.getFirst()).isEqualTo(savedAutomovil);
+    }
+
+    @Test
+    public void automovilRepository_findAllByCantPuertas_returnsEmptyList(){
+        Automovil savedAutomovil = automovilRepository.save(automovil);
+
+        List<Automovil> filteredAutomoviles = automovilRepository.findAllByCantPuertas(automovil.getCantPuertas() + 1);
+
+        Assertions.assertThat(filteredAutomoviles).isNotNull();
+        Assertions.assertThat(filteredAutomoviles).isEmpty();
+    }
+
 }

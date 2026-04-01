@@ -94,4 +94,13 @@ public class AutomovilService {
 
         automovilRepository.delete(automovil);
     }
+
+    @Transactional(readOnly = true)
+    public List<AutomovilDTORes> traerPorCantPuertas(int cantPuertas) {
+        List<Automovil> automoviles = this.automovilRepository.findAllByCantPuertas(cantPuertas);
+
+        return automoviles.stream()
+                .map(AutomovilMapper::AutomovilToAutomovilDTORes)
+                .toList();
+    }
 }

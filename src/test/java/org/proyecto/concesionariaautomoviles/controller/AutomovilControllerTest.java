@@ -192,4 +192,32 @@ public class AutomovilControllerTest {
         result.andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("No se encontró ningun automovil con el id " + customId + "!"));
     }
+
+    @Test
+    public void automovilController_traerPorCantPuertas_returnsAutomovilesWithRequestedPuertas() throws Exception{
+        given(automovilService.traerPorCantPuertas(BDDMockito.eq(automovilDTORes.getCantPuertas())))
+                .willReturn(List.of(automovilDTORes));
+
+        ResultActions response = mockMvc.perform(get("/api/automoviles/puertas/" + automovilDTORes.getCantPuertas())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(1));
+    }
+
+    @Test
+    public void automovilController_traerPorCantPuertas_returnsEmptyList() throws Exception{
+        given(automovilService.traerPorCantPuertas(BDDMockito.eq(automovilDTORes.getCantPuertas())))
+                .willReturn(List.of());
+
+        ResultActions response = mockMvc.perform(get("/api/automoviles/puertas/" + automovilDTORes.getCantPuertas())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(0));
+    }
 }
