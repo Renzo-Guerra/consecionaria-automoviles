@@ -1,5 +1,6 @@
 package org.proyecto.concesionariaautomoviles.service;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTOReq;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
@@ -45,5 +46,20 @@ public class AutomovilService {
         Automovil automovil = this.traerEntidadPorId(id);
 
         return AutomovilMapper.AutomovilToAutomovilDTORes(automovil);
+    }
+
+    @Transactional
+    public AutomovilDTORes editar(Long id, AutomovilDTOReq dto) {
+        Automovil automovil = this.traerEntidadPorId(id);
+
+        automovil.setModelo(dto.getModelo());
+        automovil.setMarca(dto.getMarca());
+        automovil.setMotor(dto.getMotor());
+        automovil.setColor(dto.getColor());
+        automovil.setPatente(dto.getPatente());
+
+        Automovil editedAutomovil = this.automovilRepository.save(automovil);
+
+        return AutomovilMapper.AutomovilToAutomovilDTORes(editedAutomovil);
     }
 }

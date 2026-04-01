@@ -32,4 +32,9 @@ public class AutomovilController {
     public ResponseEntity<AutomovilDTORes> traerPorId(@PathVariable("id") Long id){
         return ResponseEntity.ok(this.automovilService.traerPorId(id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AutomovilDTORes> editar(@PathVariable("id") Long id, @Valid @RequestBody AutomovilDTOReq dto){
+        return ResponseEntity.ok(this.automovilService.editar(id, dto));
+    }
 }

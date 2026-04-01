@@ -74,4 +74,24 @@ public class AutomovilRepositoryTest {
         Assertions.assertThat(posibleAutomovil).isEmpty();
     }
 
+    @Test
+    public void automovilRepository_edit_returnsEditedAutomovil(){
+        Automovil savedAutomovil = automovilRepository.save(automovil);
+
+        savedAutomovil.setModelo("sentra");
+        savedAutomovil.setMarca("nissan");
+        savedAutomovil.setMotor("1.6L 4 cilindros DOHC");
+        savedAutomovil.setColor("Blanco Perla");
+        savedAutomovil.setPatente("ABC123");
+
+        Automovil editedAutomovil = automovilRepository.save(savedAutomovil);
+
+        Assertions.assertThat(editedAutomovil).isNotNull();
+        Assertions.assertThat(editedAutomovil.getModelo()).isEqualTo(savedAutomovil.getModelo());
+        Assertions.assertThat(editedAutomovil.getMarca()).isEqualTo(savedAutomovil.getMarca());
+        Assertions.assertThat(editedAutomovil.getMotor()).isEqualTo(savedAutomovil.getMotor());
+        Assertions.assertThat(editedAutomovil.getColor()).isEqualTo(savedAutomovil.getColor());
+        Assertions.assertThat(editedAutomovil.getPatente()).isEqualTo(savedAutomovil.getPatente());
+    }
+
 }

@@ -128,4 +128,42 @@ public class AutomovilServiceTest {
 
         Mockito.verify(automovilRepository, Mockito.times(1)).findById(automovil.getId());
     }
+
+    @Test
+    public void automovilService_editar_returnsEditedAutomovil(){
+        AutomovilDTOReq dtoReq = AutomovilDTOReq.builder()
+                .modelo("sentra")
+                .marca("nissan")
+                .motor("1.6L 4 cilindros DOHC")
+                .color("Blanco Perla")
+                .patente("ABC123")
+                .build();
+
+        Automovil editedAutomovil = Automovil.builder()
+                .id(1L)
+                .modelo(dtoReq.getModelo())
+                .marca(dtoReq.getMarca())
+                .motor(dtoReq.getMotor())
+                .color(dtoReq.getColor())
+                .patente(dtoReq.getPatente())
+                .build();
+
+        Mockito.when(automovilRepository.findById(automovil.getId()))
+                .thenReturn(Optional.of(automovil));
+        Mockito.when(automovilRepository.save(Mockito.any(Automovil.class)))
+                .thenReturn(editedAutomovil);
+
+        AutomovilDTORes response = automovilService.editar(automovil.getId(), dtoReq);
+
+        Assertions.assertThat(response).isNotNull();
+        Assertions.assertThat(response.getModelo()).isEqualTo(dtoReq.getModelo());
+        Assertions.assertThat(response.getMarca()).isEqualTo(dtoReq.getMarca());
+        Assertions.assertThat(response.getMotor()).isEqualTo(dtoReq.getMotor());
+        Assertions.assertThat(response.getColor()).isEqualTo(dtoReq.getColor());
+        Assertions.assertThat(response.getPatente()).isEqualTo(dtoReq.getPatente());
+
+        Mockito.verify(automovilRepository, Mockito.times(1)).findById(automovil.getId());
+        Mockito.verify(automovilRepository, Mockito.times(1)).save(Mockito.any(Automovil.class));
+    }
+
 }

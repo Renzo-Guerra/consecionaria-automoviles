@@ -9,6 +9,7 @@ import org.proyecto.concesionariaautomoviles.exception.CustomNotFoundException;
 import org.proyecto.concesionariaautomoviles.service.AutomovilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,8 +20,7 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest(controllers = AutomovilController.class)
 public class AutomovilControllerTest {
@@ -131,5 +131,32 @@ public class AutomovilControllerTest {
                 .accept(MediaType.APPLICATION_JSON));
 
         response.andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void automovilController_editar_returnsEditedAutomovil() throws Exception{
+        given(automovilService.editar(BDDMockito.eq(automovilDTORes.getId()), BDDMockito.any(AutomovilDTOReq.class)))
+                .willReturn(automovilDTORes);
+
+        ResultActions response = mockMvc.perform(put("/api/automoviles/" + automovilDTORes.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(automovilDTOReq))
+                .accept(MediaType.APPLICATION_JSON));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.modelo").value(automovilDTOReq.getModelo()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.marca").value(automovilDTOReq.getMarca()));
+    }
+
+    @Test
+    public void automovilController_editar_throwsDataIntegrityViolationException() throws Exception{
+        given(automovilService.editar(BDDMockito.eq(automovilDTORes.getId()), BDDMockito.any(AutomovilDTOReq.class)))
+                .willThrow(new DataIntegrityViolationException("Ya existe un automovil con la patente " + automovilDTOReq.getPatente()));
+
+        ResultActions response = mockMvc.perform(put("/api/automoviles/" + automovilDTORes.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(automovilDTOReq)));
+
+        response.andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }
