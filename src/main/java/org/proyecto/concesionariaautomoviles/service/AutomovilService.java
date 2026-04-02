@@ -98,7 +98,7 @@ public class AutomovilService {
         Automovil formatedAutomovil = this.formatValues(automovil);
 
         try{
-            return this.automovilRepository.save(formatedAutomovil);
+            return this.automovilRepository.saveAndFlush(formatedAutomovil);
         }catch (DataIntegrityViolationException exception){
             throw new DuplicateValueException("Ya existe un automovil con la patente " + automovil.getPatente());
         }

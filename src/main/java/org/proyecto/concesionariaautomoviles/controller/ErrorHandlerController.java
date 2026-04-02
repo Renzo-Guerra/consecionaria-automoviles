@@ -1,6 +1,7 @@
 package org.proyecto.concesionariaautomoviles.controller;
 
 import org.proyecto.concesionariaautomoviles.exception.CustomNotFoundException;
+import org.proyecto.concesionariaautomoviles.exception.DuplicateValueException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,6 +36,15 @@ public class ErrorHandlerController {
         error.put("message", exception.getMessage());
 
         return ResponseEntity.status(404).body(error);
+    }
+
+    @ExceptionHandler(DuplicateValueException.class)
+    public ResponseEntity<HashMap<String, String>> handlerDuplicateValueException(DuplicateValueException exception){
+        HashMap<String, String> error = new HashMap<>();
+
+        error.put("message", exception.getMessage());
+
+        return ResponseEntity.status(400).body(error);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
