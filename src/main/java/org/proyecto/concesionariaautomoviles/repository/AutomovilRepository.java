@@ -1,12 +1,12 @@
 package org.proyecto.concesionariaautomoviles.repository;
 
 import org.proyecto.concesionariaautomoviles.entity.Automovil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface AutomovilRepository extends JpaRepository<Automovil, Long> {
-    List<Automovil> findAllByCantPuertas(int cantPuertas);
+    Page<Automovil> findAllByCantPuertas(int cantPuertas, Pageable pageable);
 }

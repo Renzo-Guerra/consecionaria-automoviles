@@ -3,12 +3,16 @@ package org.proyecto.concesionariaautomoviles.service;
 import lombok.RequiredArgsConstructor;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTOReq;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
+import org.proyecto.concesionariaautomoviles.dto.AutomovilListDTORes;
 import org.proyecto.concesionariaautomoviles.entity.Automovil;
 import org.proyecto.concesionariaautomoviles.exception.CustomNotFoundException;
 import org.proyecto.concesionariaautomoviles.exception.DuplicateValueException;
 import org.proyecto.concesionariaautomoviles.mapper.AutomovilMapper;
 import org.proyecto.concesionariaautomoviles.repository.AutomovilRepository;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,12 +33,24 @@ public class AutomovilService {
     }
 
     @Transactional(readOnly = true)
-    public List<AutomovilDTORes> traerTodos() {
-        List<Automovil> automoviles = this.automovilRepository.findAll();
+    public AutomovilListDTORes traerTodos(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
 
-        return automoviles.stream()
+        Page<Automovil> automovilesPage = this.automovilRepository.findAll(pageable);
+        List<Automovil> listOfAutomoviles = automovilesPage.getContent();
+
+        List<AutomovilDTORes> content = listOfAutomoviles.stream()
                 .map(AutomovilMapper::AutomovilToAutomovilDTORes)
                 .toList();
+
+        return AutomovilListDTORes.builder()
+                .content(content)
+                .pageNo(automovilesPage.getNumber())
+                .pageSize(automovilesPage.getSize())
+                .totalElements(automovilesPage.getTotalElements())
+                .totalPages(automovilesPage.getTotalPages())
+                .last(automovilesPage.isLast())
+                .build();
     }
 
     @Transactional
@@ -96,11 +112,22 @@ public class AutomovilService {
     }
 
     @Transactional(readOnly = true)
-    public List<AutomovilDTORes> traerPorCantPuertas(int cantPuertas) {
-        List<Automovil> automoviles = this.automovilRepository.findAllByCantPuertas(cantPuertas);
+    public AutomovilListDTORes traerPorCantPuertas(int cantPuertas, int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
 
-        return automoviles.stream()
+        Page<Automovil> automovilesPage = this.automovilRepository.findAllByCantPuertas(cantPuertas, pageable);
+
+        List<AutomovilDTORes> content = automovilesPage.getContent().stream()
                 .map(AutomovilMapper::AutomovilToAutomovilDTORes)
                 .toList();
+
+        return AutomovilListDTORes.builder()
+                .content(content)
+                .pageNo(automovilesPage.getNumber())
+                .pageSize(automovilesPage.getSize())
+                .totalElements(automovilesPage.getTotalElements())
+                .totalPages(automovilesPage.getTotalPages())
+                .last(automovilesPage.isLast())
+                .build();
     }
 }

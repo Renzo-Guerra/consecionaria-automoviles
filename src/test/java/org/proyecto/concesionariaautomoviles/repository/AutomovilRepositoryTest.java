@@ -7,8 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.proyecto.concesionariaautomoviles.entity.Automovil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 @DataJpaTest
@@ -48,13 +50,15 @@ public class AutomovilRepositoryTest {
 
     @Test
     public void automovilRepository_findAll_returnsAllAutomoviles(){
+        Pageable pageable = PageRequest.of(0, 10);
+
         this.automovilRepository.save(automovil);
 
-        List<Automovil> automoviles = this.automovilRepository.findAll();
+        Page<Automovil> automoviles = this.automovilRepository.findAll(pageable);
 
         Assertions.assertThat(automoviles).isNotNull();
-        Assertions.assertThat(automoviles).isNotEmpty();
-        Assertions.assertThat(automoviles).hasSize(1);
+        Assertions.assertThat(automoviles.getContent()).isNotEmpty();
+        Assertions.assertThat(automoviles.getTotalElements()).isEqualTo(1);
     }
 
     @Test
@@ -112,24 +116,29 @@ public class AutomovilRepositoryTest {
 
     @Test
     public void automovilRepository_findAllByCantPuertas_returnsAutomovilesWithRequestedPuertas(){
-        Automovil savedAutomovil = automovilRepository.save(automovil);
+        Pageable pageable = PageRequest.of(0, 10);
 
-        List<Automovil> filteredAutomoviles = automovilRepository.findAllByCantPuertas(automovil.getCantPuertas());
+        Automovil savedAutomovil = automovilRepository.save(automovil);
+        System.out.println(savedAutomovil);
+        Page<Automovil> filteredAutomoviles = automovilRepository.findAllByCantPuertas(savedAutomovil.getCantPuertas(), pageable);
+        System.out.println(filteredAutomoviles);
 
         Assertions.assertThat(filteredAutomoviles).isNotNull();
-        Assertions.assertThat(filteredAutomoviles).isNotEmpty();
-        Assertions.assertThat(filteredAutomoviles).hasSize(1);
-        Assertions.assertThat(filteredAutomoviles.getFirst()).isEqualTo(savedAutomovil);
+        Assertions.assertThat(filteredAutomoviles.getContent()).isNotEmpty();
+        Assertions.assertThat(filteredAutomoviles.getTotalElements()).isEqualTo(1);
+        Assertions.assertThat(filteredAutomoviles.getContent().getFirst()).isEqualTo(savedAutomovil);
     }
 
     @Test
     public void automovilRepository_findAllByCantPuertas_returnsEmptyList(){
+        Pageable pageable = PageRequest.of(0, 10);
+
         Automovil savedAutomovil = automovilRepository.save(automovil);
 
-        List<Automovil> filteredAutomoviles = automovilRepository.findAllByCantPuertas(automovil.getCantPuertas() + 1);
+        Page<Automovil> filteredAutomoviles = automovilRepository.findAllByCantPuertas(savedAutomovil.getCantPuertas() + 1, pageable);
 
         Assertions.assertThat(filteredAutomoviles).isNotNull();
-        Assertions.assertThat(filteredAutomoviles).isEmpty();
+        Assertions.assertThat(filteredAutomoviles.getContent()).isEmpty();
     }
 
 }

@@ -10,9 +10,14 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTOReq;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
+import org.proyecto.concesionariaautomoviles.dto.AutomovilListDTORes;
 import org.proyecto.concesionariaautomoviles.entity.Automovil;
 import org.proyecto.concesionariaautomoviles.exception.CustomNotFoundException;
 import org.proyecto.concesionariaautomoviles.repository.AutomovilRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,29 +69,40 @@ public class AutomovilServiceTest {
 
     @Test
     public void automovilService_traerTodos_returnsAllAutomoviles(){
-        Mockito.when(automovilRepository.findAll())
-                .thenReturn(List.of(automovil));
+        Pageable pageable = PageRequest.of(0, 10);
 
-        List<AutomovilDTORes> automoviles = automovilService.traerTodos();
+        Page<Automovil> page = new PageImpl<>(List.of(automovil), pageable, 1);
 
-        Assertions.assertThat(automoviles).isNotNull();
-        Assertions.assertThat(automoviles).isNotEmpty();
-        Assertions.assertThat(automoviles).hasSize(1);
+        Mockito.when(automovilRepository.findAll(pageable))
+                .thenReturn(page);
 
-        Mockito.verify(automovilRepository, Mockito.times(1)).findAll();
+        AutomovilListDTORes response = automovilService.traerTodos(pageable.getPageNumber(), pageable.getPageSize());
+
+        Assertions.assertThat(response).isNotNull();
+        Assertions.assertThat(response.getContent()).isNotEmpty();
+        Assertions.assertThat(response.getContent().size()).isEqualTo(page.getNumberOfElements());
+        Assertions.assertThat(response.getContent().getFirst().getId()).isEqualTo(automovil.getId());
+        Assertions.assertThat(response.getPageSize()).isEqualTo(pageable.getPageSize());
+
+        Mockito.verify(automovilRepository, Mockito.times(1)).findAll(pageable);
     }
 
     @Test
     public void automovilService_traerTodos_returnsEmptyList(){
-        Mockito.when(automovilRepository.findAll())
-                .thenReturn(List.of());
+        Pageable pageable = PageRequest.of(1, 10);
 
-        List<AutomovilDTORes> automoviles = automovilService.traerTodos();
+        Page<Automovil> page = new PageImpl<>(List.of(), pageable, 0);
 
-        Assertions.assertThat(automoviles).isNotNull();
-        Assertions.assertThat(automoviles).isEmpty();
+        Mockito.when(automovilRepository.findAll(pageable))
+                .thenReturn(page);
 
-        Mockito.verify(automovilRepository, Mockito.times(1)).findAll();
+        AutomovilListDTORes response = automovilService.traerTodos(pageable.getPageNumber(), pageable.getPageSize());
+
+        Assertions.assertThat(response).isNotNull();
+        Assertions.assertThat(response.getContent()).isEmpty();
+        Assertions.assertThat(response.getPageSize()).isEqualTo(pageable.getPageSize());
+
+        Mockito.verify(automovilRepository, Mockito.times(1)).findAll(pageable);
     }
 
     @Test
@@ -189,30 +205,38 @@ public class AutomovilServiceTest {
 
     @Test
     public void automovilService_traerPorCantPuertas_returnsAutomovilesWithRequestedPuertas(){
-        Mockito.when(automovilRepository.findAllByCantPuertas(automovil.getCantPuertas()))
-                .thenReturn(List.of(automovil));
+        Pageable pageable = PageRequest.of(1, 10);
 
-        List<AutomovilDTORes> filteredAutomoviles = automovilService.traerPorCantPuertas(automovil.getCantPuertas());
+        Page<Automovil> page = new PageImpl<>(List.of(automovil), pageable, 1);
 
-        Assertions.assertThat(filteredAutomoviles).isNotNull();
-        Assertions.assertThat(filteredAutomoviles).isNotEmpty();
-        Assertions.assertThat(filteredAutomoviles).hasSize(1);
-        Assertions.assertThat(filteredAutomoviles.getFirst().getId()).isEqualTo(automovil.getId());
+        Mockito.when(automovilRepository.findAllByCantPuertas(automovil.getCantPuertas(), pageable))
+                .thenReturn(page);
 
-        Mockito.verify(automovilRepository, Mockito.times(1)).findAllByCantPuertas(automovil.getCantPuertas());
+        AutomovilListDTORes response = automovilService.traerPorCantPuertas(automovil.getCantPuertas(), pageable.getPageNumber(), pageable.getPageSize());
+
+        Assertions.assertThat(response).isNotNull();
+        Assertions.assertThat(response.getContent()).isNotEmpty();
+        Assertions.assertThat(response.getContent()).hasSize(1);
+        Assertions.assertThat(response.getContent().getFirst().getId()).isEqualTo(automovil.getId());
+
+        Mockito.verify(automovilRepository, Mockito.times(1)).findAllByCantPuertas(automovil.getCantPuertas(), pageable);
     }
 
     @Test
     public void automovilService_traerPorCantPuertas_returnsEmptyList(){
-        Mockito.when(automovilRepository.findAllByCantPuertas(automovil.getCantPuertas()))
-                .thenReturn(List.of());
+        Pageable pageable = PageRequest.of(1, 10);
 
-        List<AutomovilDTORes> filteredAutomoviles = automovilService.traerPorCantPuertas(automovil.getCantPuertas());
+        Page<Automovil> page = new PageImpl<>(List.of(), pageable, 1);
 
-        Assertions.assertThat(filteredAutomoviles).isNotNull();
-        Assertions.assertThat(filteredAutomoviles).isEmpty();
+        Mockito.when(automovilRepository.findAllByCantPuertas(automovil.getCantPuertas(), pageable))
+                .thenReturn(page);
 
-        Mockito.verify(automovilRepository, Mockito.times(1)).findAllByCantPuertas(automovil.getCantPuertas());
+        AutomovilListDTORes response = automovilService.traerPorCantPuertas(automovil.getCantPuertas(), pageable.getPageNumber(), pageable.getPageSize());
+
+        Assertions.assertThat(response).isNotNull();
+        Assertions.assertThat(response.getContent()).isEmpty();
+
+        Mockito.verify(automovilRepository, Mockito.times(1)).findAllByCantPuertas(automovil.getCantPuertas(), pageable);
     }
 
 }

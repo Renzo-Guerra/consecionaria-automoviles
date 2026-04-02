@@ -4,11 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTOReq;
 import org.proyecto.concesionariaautomoviles.dto.AutomovilDTORes;
+import org.proyecto.concesionariaautomoviles.dto.AutomovilListDTORes;
 import org.proyecto.concesionariaautomoviles.service.AutomovilService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/automoviles")
@@ -24,12 +23,19 @@ public class AutomovilController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AutomovilDTORes>> traerTodos(){
-        return ResponseEntity.ok(this.automovilService.traerTodos());
+    public ResponseEntity<AutomovilListDTORes> traerTodos(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+    ){
+        return ResponseEntity.ok(this.automovilService.traerTodos(pageNo, pageSize));
     }
     @GetMapping("/puertas/{cantPuertas}")
-    public ResponseEntity<List<AutomovilDTORes>> traerPorCantPuertas(@PathVariable("cantPuertas") int cantPuertas){
-        return ResponseEntity.ok(this.automovilService.traerPorCantPuertas(cantPuertas));
+    public ResponseEntity<AutomovilListDTORes> traerPorCantPuertas(
+            @PathVariable("cantPuertas") int cantPuertas,
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+    ){
+        return ResponseEntity.ok(this.automovilService.traerPorCantPuertas(cantPuertas, pageNo, pageSize));
     }
 
     @GetMapping("/{id}")
