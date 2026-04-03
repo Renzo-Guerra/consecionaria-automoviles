@@ -24,3 +24,11 @@ una de ellas:
 * Lógica
 * Interfaz gráfica (en caso de realizarla) 
 * Persistencia. 
+
+## Como usarlo:
+Una vez clonado el repositorio:
+- Abrir Docker y dejarlo en segundo plano
+- Ejecutar el comando "docker-compose up" en el path de la carpeta root de la app concesionaria-automobiles
+- Para testear la app se puede hacer mediante swagger: 
+
+[Testear con swagger](http://localhost:8080/swagger-ui/index.html)
